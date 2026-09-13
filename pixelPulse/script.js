@@ -3,30 +3,37 @@ const form = document.getElementById("search-form");
 const searchInput = document.getElementById("search-input");
 const results = document.getElementById("results");
 const resultCount = document.getElementById("result-count");
-
+const emptyState = document.getElementById("empty-state");
 
 // Wikimedia Commons API
 const API = "https://commons.wikimedia.org/w/api.php";
 
-
 // Listen for the Search form
 form.addEventListener("submit", async function (event) {
-
   // Stop the page from refreshing
   event.preventDefault();
 
-  // Get what the user typed
+  // Get the search text
   const query = searchInput.value.trim();
 
-  // Ignore empty searches
+  // Ignore blank searches
   if (query === "") {
     return;
   }
 
-
-  // Remove old results
+  // Clear old results
   results.innerHTML = "";
 
+  // Hide the old empty state
+  emptyState.style.display = "none";
+
+  // Show loading message
+  resultCount.textContent = "Searching...";
+  results.innerHTML = `
+    <div class="status-message">
+      🔎 Searching for "${query}"...
+    </div>
+  `;
 
   // Build the API URL
   const url =
@@ -42,10 +49,8 @@ form.addEventListener("submit", async function (event) {
     "&format=json" +
     "&origin=*";
 
-
   try {
-
-    // Fetch data from the API
+    // Ask the API for images
     const response = await fetch(url);
 
     // Check if the request was successful
@@ -53,81 +58,99 @@ form.addEventListener("submit", async function (event) {
       throw new Error("Request failed");
     }
 
-    // Convert response into JSON
+    // Convert the response into JavaScript data
     const data = await response.json();
 
-
-    // Get the pages from the API response
+    // Get the results
     const pages = data.query?.pages || {};
-
     const items = Object.values(pages);
 
+    // Clear the loading message
+    results.innerHTML = "";
+
+    // Check if there are no results
+    if (items.length === 0) {
+      resultCount.textContent = "No results";
+
+      results.innerHTML = `
+        <div class="status-message">
+          <h3>No results found 😕</h3>
+          <p>
+            No images were found for "${query}".
+            Try another search word.
+          </p>
+        </div>
+      `;
+
+      return;
+    }
 
     // Show result count
     resultCount.textContent =
       `Showing ${items.length} results for "${query}"`;
 
-
-    // Create a card for every result
+    // Create a card for every image
     items.forEach(function (item) {
+      const imageInfo = item.imageinfo?.[0];
 
-      // Create the card
+      // Skip items without image information
+      if (!imageInfo) {
+        return;
+      }
+
+      // Create card
       const card = document.createElement("article");
-
       card.className = "card";
-
 
       // Create image
       const image = document.createElement("img");
 
-      image.src = item.imageinfo?.[0]?.thumburl ||
-                  item.imageinfo?.[0]?.url;
+      image.src = imageInfo.thumburl || imageInfo.url;
 
       image.alt = item.title.replace("File:", "");
-
 
       // Create title
       const title = document.createElement("h3");
 
-      title.textContent =
-        item.title.replace("File:", "");
+      title.textContent = item.title.replace("File:", "");
 
-
-      // Add image and title to card
+      // Put image and title inside card
       card.appendChild(image);
       card.appendChild(title);
 
-
-      // Add card to results grid
+      // Put card inside results
       results.appendChild(card);
-
     });
-
   } catch (error) {
-
+    // Show error in console for developers
     console.error(error);
 
-    resultCount.textContent = "Unable to load results.";
+    // Clear loading message
+    results.innerHTML = "";
 
+    // Show friendly error message
+    resultCount.textContent = "Search failed";
+
+    results.innerHTML = `
+      <div class="status-message">
+        <h3>Something went wrong 😕</h3>
+        <p>
+          We couldn't load the images.
+          Please check your internet connection and try again.
+        </p>
+      </div>
+    `;
   }
-
 });
-
 
 // Quick-pick buttons
 const chips = document.querySelectorAll(".chip");
 
-
 chips.forEach(function (chip) {
-
   chip.addEventListener("click", function () {
-
-    // Put chip text into search box
     searchInput.value = chip.textContent;
 
-    // Run the search
+    // Submit the form
     form.requestSubmit();
-
   });
-
 });
