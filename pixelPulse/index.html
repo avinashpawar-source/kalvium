@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>FrameNest — Discover Images</title>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- Sticky Header -->
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-icon">▦</span>
+
+      <div>
+        <h1>FrameNest</h1>
+        <p>Find images that bring your ideas to life.</p>
+      </div>
+    </div>
+  </header>
+
+
+  <main>
+
+    <!-- Search Section -->
+    <section class="search-section">
+
+      <div class="intro">
+        <p class="eyebrow">IMAGE DISCOVERY</p>
+
+        <h2>What are you looking for?</h2>
+
+        <p>
+          Search for places, people, nature, animals, or anything
+          that inspires you.
+        </p>
+      </div>
+
+
+      <!-- Search Form -->
+      <form id="search-form" class="search-form">
+
+        <label for="search-input">Search for images</label>
+
+        <div class="search-row">
+
+          <input
+            type="search"
+            id="search-input"
+            name="search"
+            placeholder="Try &quot;mountains&quot; or &quot;coffee&quot;"
+          >
+
+          <button type="submit" id="search-button">
+            Search
+          </button>
+
+          <button type="reset" id="clear-button">
+            Clear
+          </button>
+
+        </div>
+
+      </form>
+
+
+      <!-- Quick Picks -->
+      <div class="quick-picks">
+
+        <span>Quick picks:</span>
+
+        <button type="button" class="chip">Nature</button>
+        <button type="button" class="chip">Cities</button>
+        <button type="button" class="chip">Animals</button>
+        <button type="button" class="chip">Food</button>
+
+      </div>
+
+    </section>
+
+
+    <!-- Results Section -->
+    <section class="results-section">
+
+      <div class="results-heading">
+
+        <h2>Discover</h2>
+
+        <!-- Placeholder for Part 2 -->
+        <span id="result-count">Results will appear here</span>
+
+      </div>
+
+
+      <!-- Empty State -->
+      <div id="empty-state" class="empty-state">
+        <div class="empty-icon">⌕</div>
+
+        <h3>Search to see results</h3>
+
+        <p>
+          Enter a topic above and your image collection
+          will appear here.
+        </p>
+      </div>
+
+
+      <!-- Part 2 will add images here -->
+      <div id="results" class="results-grid"></div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+    <p>FrameNest · Image discovery made simple.</p>
+  </footer>
+
+
+  <script src="script.js"></script>
+
+</body>
+</html>
