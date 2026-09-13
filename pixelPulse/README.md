@@ -1,0 +1,3 @@
+# FrameNest
+
+FrameNest is an image discovery app where users will be able to search for images by topic and view the results in a responsive gallery. I chose a warm orange and cream colour palette to give the app a friendly and creative feeling instead of using the typical purple image-search style. I added quick-pick category chips so users can easily discover common topics without having to think of a search term. I also added a Clear button and an empty-state message so the interface clearly tells users what they can do before any results are loaded.
